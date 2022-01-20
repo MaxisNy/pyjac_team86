@@ -1,30 +1,41 @@
 import pygame
+from Timer import Timer
 
 
 class Player:
     """
     The Player character class.
     """
-    BLOCK_DOWN_SPEED = 3  # Player's regular horizontal movement speed
+    BLOCK_DOWN_SPEED = 4  # Player's regular horizontal movement speed
     BLOCK_UP_SPEED = 1  # Player's movement speed with defense enables
+
     # TODO: replace WIDTH and HEIGHT with the Player image
     WIDTH = 50
     HEIGHT = 70
 
+    # TODO: move acceleration to the main
+    ACCELERATION = 600
+
+    INITIAL_COORDINATES = (300, 450)   # Player's coordinates as the game starts
+
     x_pos: int  # Player's x coordinate
     y_pos: int  # Player's y coordinate
-    block: bool  # True when the shield is up, False otherwise
-    speed: int  # Player's horizontal movement speed
+    block: bool  # True if the shield is up, False otherwise
+    jumping: bool  # True if the Player is currently in the air, False otherwise
+    speed_hor: int  # Player's horizontal movement speed
+    speed_ver: int  # Player's vertical movement speed
 
-    def __init__(self, x_pos, y_pos) -> None:
+    def __init__(self) -> None:
         """
-        :param x_pos: Player's x coordinate
-        :param y_pos: Player's y coordinate
+        The Player constructor.
         """
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        self.x_pos = self.INITIAL_COORDINATES[0]
+        self.y_pos = self.INITIAL_COORDINATES[1]
         self.block = False
-        self.speed = self.get_speed()
+        self.jumping = False
+        self.speed_hor = self.get_speed()
+        self.speed_ver = 450
+        self.timer = Timer()
 
     def get_x(self):
         """
@@ -36,6 +47,17 @@ class Player:
         """
         Returns Player's y coordinate.
         """
+        if self.jumping:
+            self.y_pos = self.INITIAL_COORDINATES[1] - \
+                         (self.speed_ver * self.timer.get_time_elapsed()) + \
+                         (self.ACCELERATION *
+                          (self.timer.get_time_elapsed()**2) / 2)
+
+            # end the jump
+            if self.y_pos > self.INITIAL_COORDINATES[1]:
+                self.y_pos = self.INITIAL_COORDINATES[1]
+                self.jumping = False
+
         return self.y_pos
 
     def get_speed(self):
@@ -53,10 +75,10 @@ class Player:
         # TODO: implement image drawing
         if self.block:
             pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(
-                self.x_pos, self.y_pos, self.WIDTH, self.HEIGHT))
+                self.get_x(), self.get_y(), self.WIDTH, self.HEIGHT))
         else:
             pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(
-                self.x_pos, self.y_pos, self.WIDTH, self.HEIGHT))
+                self.get_x(), self.get_y(), self.WIDTH, self.HEIGHT))
 
     def move_right(self):
         """
@@ -71,14 +93,16 @@ class Player:
         self.x_pos -= self.get_speed()
 
     def jump(self):
-        # TODO: implement jumping
-        pass
+        if not self.jumping:
+            self.jumping = True
+            self.timer.start()
 
     def block_up(self):
         """
-        Enables defense.
+        Enables defense. Only possible when the Player is on the ground.
         """
-        self.block = True
+        if not self.jumping:
+            self.block = True
 
     def block_down(self):
         """
@@ -89,9 +113,13 @@ class Player:
 
 if __name__ == '__main__':
     pygame.init()
-    surface = pygame.display.set_mode((700, 700))
 
-    p = Player(300, 120)
+    WIDTH = 1600
+    HEIGHT = 900
+
+    surface = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    p = Player()
 
     game_running = True
     FPS = 60
@@ -109,16 +137,17 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_running = False
-                quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    p.move_left()
+                # quit()
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] and p.get_x() > 0:
             p.move_left()
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] and p.get_x() + p.WIDTH < WIDTH:
             p.move_right()
+
+        if keys[pygame.K_SPACE]:
+            p.jump()
+
         if keys[pygame.K_LSHIFT]:
             p.block_up()
         else:
