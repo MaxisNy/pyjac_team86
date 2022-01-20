@@ -11,7 +11,8 @@ class Timer:
 
     # TODO: do we need this constructor at all???
     def __init__(self):
-        self.time = 0
+        self.time = time.time()
+        self.is_set = False
 
     def get_time(self):
         """
@@ -30,3 +31,7 @@ class Timer:
         Sets the current time to be the point-reference.
         """
         self.time = time.time()
+        self.is_set = True
+
+    def stop(self):
+        self.is_set = False
