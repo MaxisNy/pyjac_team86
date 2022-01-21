@@ -1,6 +1,7 @@
 from Timer import Timer
 import pygame
 import random
+import math
 
 
 class Projectile:
@@ -11,11 +12,13 @@ class Projectile:
     WIDTH = 20
     HEIGHT = 20
 
+    ANGLE = 60
+
     def __init__(self, side):
         self.x_0 = self.get_init_coords(side)
         self.y_0 = 600
         # TODO: adjust the range of velocities
-        self.velocity = random.randint(100, 150)
+        self.velocity = random.randint(150, 200)
         self._timer = Timer()
         self.launched = False
         self.side = side
@@ -27,11 +30,13 @@ class Projectile:
 
     def get_x(self, side):
         return self.x_0 + ((-1)**side) * self.velocity * \
+               math.cos(self.ANGLE * math.pi / 180) * \
                self._timer.get_time_elapsed()
 
     def get_y(self):
         return self.y_0 - \
-               self.velocity * self._timer.get_time_elapsed() + \
+               self.velocity * math.sin(self.ANGLE * math.pi / 180) * \
+               self._timer.get_time_elapsed() + \
                (self.ACCELERATION * (self._timer.get_time_elapsed() ** 2) / 2)
 
     def draw(self, screen):
