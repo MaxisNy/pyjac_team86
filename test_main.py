@@ -3,11 +3,11 @@ import pygame
 
 pygame.init()
 
-WIDTH = 1600
-HEIGHT = 900
+WIDTH = 1280
+HEIGHT = 720
 
 # TODO: define a more precise variable
-SEA_LEVEL = 700
+SEA_LEVEL = 601
 
 surface = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -15,31 +15,20 @@ game_running = True
 FPS = 60
 
 pc = ProjectileContainer()
-pc.generate(3)
-
-for i in range(len(pc.projectiles)):
-    print(f"#{i}, launched: {pc.projectiles[i].launched}")
+pc.generate(30)
 
 clock = pygame.time.Clock()
-
 
 while game_running:
     clock.tick(FPS)
 
     surface.fill((0, 0, 0))
 
-    # projectiles.launch()
+    if pc.get_size():
+        pc.launch()
 
-    pc.launch()
-
-    for projectile in pc.projectiles:
-
-        # print(projectile.get_y())
-
-        if projectile.get_y() < SEA_LEVEL:
-            projectile.draw(surface)
-        else:
-            pc.remove(projectile)
+    for projectile in pc.get_launched():
+        projectile.draw(surface)
 
     pygame.display.update()
 
@@ -50,3 +39,8 @@ while game_running:
         if event.type == pygame.QUIT:
             game_running = False
             # quit()
+
+    # collision check
+    for projectile in pc.get_launched():
+        if projectile.get_y() >= SEA_LEVEL:
+            pc.remove(projectile)
