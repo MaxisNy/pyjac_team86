@@ -1,25 +1,23 @@
 import pygame
+import Settings
+from load_img import load_image
 from Timer import Timer
+from typing import Dict
 
 
-class Player:
+class Player(pygame.sprite.Sprite):
     """
     The Player character class.
     """
-    BLOCK_DOWN_SPEED = 4  # Player's regular horizontal movement speed
-    BLOCK_UP_SPEED = 1  # Player's movement speed with defense enables
 
     # TODO: replace WIDTH and HEIGHT with the Player image
     WIDTH = 50
     HEIGHT = 70
 
-    # TODO: move acceleration to the main
-    ACCELERATION = 600
-
     INITIAL_COORDINATES = (300, 450)   # Player's coordinates as the game starts
 
-    x_pos: int  # Player's x coordinate
-    y_pos: int  # Player's y coordinate
+    x: int  # Player's x coordinate
+    y: int  # Player's y coordinate
     block: bool  # True if the shield is up, False otherwise
     jumping: bool  # True if the Player is currently in the air, False otherwise
     speed_hor: int  # Player's horizontal movement speed
@@ -29,73 +27,92 @@ class Player:
         """
         The Player constructor.
         """
-        self.x_pos = self.INITIAL_COORDINATES[0]
-        self.y_pos = self.INITIAL_COORDINATES[1]
+        super().__init__()
         self.block = False
         self.jumping = False
-        self.speed_hor = self.get_speed()
-        self.speed_ver = 450
+        self.speed_hor = Settings.PLAYER_BLOCK_DOWN_SPEED
+        self.speed_ver = Settings.PLAYER_JUMP_SPEED
         self.timer = Timer()
+        self.images = self.generate_player_images()
+        self.direction = "LEFT"
+        self.rect = self.images["LEFT"].get_rect()
+        self.rect.x = self.INITIAL_COORDINATES[0]
+        self.rect.y = self.INITIAL_COORDINATES[1]
+
+    @staticmethod
+    def generate_player_images() -> Dict:
+        return {"LEFT": load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
+                "RIGHT": pygame.transform.flip(load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False),
+                "LEFT_JUMP": load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
+                "RIGHT_JUMP": pygame.transform.flip(load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False),
+                "LEFT_BLOCK": load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
+                "RIGHT_BLOCK": pygame.transform.flip(load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False)}
 
     def get_x(self):
         """
         Returns Player's x coordinate.
         """
-        return self.x_pos
+        return self.rect.x
 
     def get_y(self):
         """
         Returns Player's y coordinate.
         """
         if self.jumping:
-            self.y_pos = self.INITIAL_COORDINATES[1] - \
+            self.rect.y = self.INITIAL_COORDINATES[1] - \
                          (self.speed_ver * self.timer.get_time_elapsed()) + \
-                         (self.ACCELERATION *
+                         (Settings.PLAYER_ACCELERATION *
                           (self.timer.get_time_elapsed()**2) / 2)
 
             # end the jump
-            if self.y_pos > self.INITIAL_COORDINATES[1]:
-                self.y_pos = self.INITIAL_COORDINATES[1]
+            if self.rect.y > self.INITIAL_COORDINATES[1]:
+                self.rect.y = self.INITIAL_COORDINATES[1]
                 self.jumping = False
 
-        return self.y_pos
+        return self.rect.y
 
     def get_speed(self):
         """
         Returns Player's horizontal movement speed.
         """
         if self.block:
-            return self.BLOCK_UP_SPEED
-        return self.BLOCK_DOWN_SPEED
+            return Settings.PLAYER_BLOCK_UP_SPEED
+        return Settings.PLAYER_BLOCK_DOWN_SPEED
 
     def draw(self, screen):
         """
         Draws the Player avatar on the screen.
         """
-        # TODO: implement image drawing
-        if self.block:
-            pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(
-                self.get_x(), self.get_y(), self.WIDTH, self.HEIGHT))
-        else:
-            pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(
-                self.get_x(), self.get_y(), self.WIDTH, self.HEIGHT))
+        screen.blit(self.images[self.direction], (self.get_x(), self.get_y()))
 
     def move_right(self):
         """
         Moves Player horizontally to the right.
         """
-        self.x_pos += self.get_speed()
+        self.rect.x += self.get_speed()
+        if self.jumping:
+            self.direction = "RIGHT_JUMP"
+        else:
+            self.direction = "RIGHT"
 
     def move_left(self):
         """
         Moves Player horizontally to the left.
         """
-        self.x_pos -= self.get_speed()
+        self.rect.x -= self.get_speed()
+        if self.jumping:
+            self.direction = "LEFT_JUMP"
+        else:
+            self.direction = "LEFT"
 
     def jump(self):
         if not self.jumping:
             self.jumping = True
             self.timer.start()
+            if self.direction == "LEFT":
+                self.direction = "LEFT_JUMP"
+            else:
+                self.direction = "RIGHT_JUMP"
 
     def block_up(self):
         """
@@ -103,6 +120,10 @@ class Player:
         """
         if not self.jumping:
             self.block = True
+            if self.direction == "LEFT":
+                self.direction = "LEFT_BLOCK"
+            else:
+                self.direction = "RIGHT_BLOCK"
 
     def block_down(self):
         """
@@ -132,7 +153,7 @@ if __name__ == '__main__':
         p.draw(surface)
         pygame.display.update()
 
-        print(p.get_x(), p.get_y())
+        print(p.direction)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
