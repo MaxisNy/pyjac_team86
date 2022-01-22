@@ -1,5 +1,6 @@
 import Settings
 from Timer import Timer
+from typing import Dict
 from load_img import load_image
 import pygame
 import random
@@ -17,13 +18,21 @@ class Projectile(pygame.sprite.Sprite):
         self.velocity = random.randint(150, 200)
         self._timer = Timer()
         self.launched = False
+        self._style = "PROJECTILE"
         self.side = side
-        self.image = load_image(
-            Settings.PROJECTILE_IMG, (29 / 28) * Settings.SCREEN_WIDTH // 60,
-            Settings.SCREEN_WIDTH // 60)
-        self.rect = self.image.get_rect()
+        self.images = self.generate_projectile_images()
+        self.rect = self.images[self._style].get_rect()
         self.rect.x = self.get_init_coords(side)
         self.rect.y = Settings.INITIAL_PROJECTILE_HEIGHT
+
+    def generate_projectile_images(self) -> Dict:
+        return {
+            "PROJECTILE": load_image(Settings.PROJECTILE_IMG,
+                                     (29 / 28) * Settings.SCREEN_WIDTH // 60,
+                                     Settings.SCREEN_WIDTH // 60),
+            "EXPLOSION": load_image(Settings.EXPLOSION_IMG,
+                                    Settings.SCREEN_WIDTH // 60,
+                                    (29 / 28) * Settings.SCREEN_WIDTH // 60)}
 
     def get_init_coords(self, side):
         if side:
@@ -43,11 +52,14 @@ class Projectile(pygame.sprite.Sprite):
                (Settings.PROJECTILE_ACCELERATION * (self._timer.get_time_elapsed() ** 2) / 2)
         return self.rect.y
 
+    def get_style(self):
+        return self._style
+
     def draw(self, screen):
         """
         Draws the Player avatar on the screen.
         """
-        screen.blit(self.image, (self.get_x(self.side), self.get_y()))
+        screen.blit(self.images[self._style], (self.get_x(self.side), self.get_y()))
 
     def launch(self):
         if not self.launched:
