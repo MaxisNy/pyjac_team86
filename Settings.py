@@ -4,7 +4,7 @@ SEA_LEVEL = SCREEN_HEIGHT - 75
 
 BACKGROUND_IMG = "./sprites/bg2.png"
 ENEMY_SHIP_IMG = "./sprites/enemy_ship.png"
-PLAYER_SHIP_IMG = "./sprites/player_ship_3.png"
+PLAYER_SHIP_IMG = "./sprites/new_flatship.png"
 PLAYER_SHIP_BG_IMG = "./sprites/ship_background.png"
 HEART_IMG = "./sprites/heart.png"
 
