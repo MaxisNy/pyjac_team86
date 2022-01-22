@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
     WIDTH = 50
     HEIGHT = 70
 
-    INITIAL_COORDINATES = (300.00, 550.00)   # Player's coordinates as the game starts
+    INITIAL_COORDINATES = (300.00, 500.00)   # Player's coordinates as the game starts
 
     x: int  # Player's x coordinate
     y: int  # Player's y coordinate
