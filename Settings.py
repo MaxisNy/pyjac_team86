@@ -1,5 +1,6 @@
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1800
+SEA_LEVEL = SCREEN_HEIGHT - 75
 
 BACKGROUND_IMG = "./sprites/bg2.png"
 ENEMY_SHIP_IMG = "./sprites/enemy_ship.png"
@@ -8,6 +9,9 @@ PLAYER_SHIP_BG_IMG = "./sprites/ship_background.png"
 HEART_IMG = "./sprites/heart.png"
 
 # projectiles
+NUM_OF_PROJECTILES = 30
+PROJECTILE_ACCELERATION = 50
+PROJECTILE_ANGLE = 60
 PROJECTILE_IMG = "./sprites/projectile.png"
 
 # player
