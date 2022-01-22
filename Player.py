@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
     WIDTH = 50
     HEIGHT = 70
 
-    INITIAL_COORDINATES = (300, 450)   # Player's coordinates as the game starts
+    INITIAL_COORDINATES = (300.00, 550.00)   # Player's coordinates as the game starts
 
     x: int  # Player's x coordinate
     y: int  # Player's y coordinate
@@ -41,12 +41,12 @@ class Player(pygame.sprite.Sprite):
 
     @staticmethod
     def generate_player_images() -> Dict:
-        return {"LEFT": load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
-                "RIGHT": pygame.transform.flip(load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False),
-                "LEFT_JUMP": load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
-                "RIGHT_JUMP": pygame.transform.flip(load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False),
-                "LEFT_BLOCK": load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10),
-                "RIGHT_BLOCK": pygame.transform.flip(load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 10, Settings.SCREEN_WIDTH // 10), True, False)}
+        return {"LEFT": load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 37, (38 / 24) * Settings.SCREEN_WIDTH // 37),
+                "RIGHT": pygame.transform.flip(load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 37, (38 / 24) * Settings.SCREEN_WIDTH // 37), True, False),
+                "LEFT_JUMP": load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 34, (41 / 35) * Settings.SCREEN_WIDTH // 34),
+                "RIGHT_JUMP": pygame.transform.flip(load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 34, (41 / 35) * Settings.SCREEN_WIDTH // 34), True, False),
+                "LEFT_BLOCK": load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 27, (31 / 24) * Settings.SCREEN_WIDTH // 27),
+                "RIGHT_BLOCK": pygame.transform.flip(load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 27, (31 / 24) * Settings.SCREEN_WIDTH // 27), True, False)}
 
     def get_x(self):
         """
@@ -54,7 +54,7 @@ class Player(pygame.sprite.Sprite):
         """
         return self.rect.x
 
-    def get_y(self):
+    def get_y(self) -> float:
         """
         Returns Player's y coordinate.
         """
