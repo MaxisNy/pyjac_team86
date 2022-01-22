@@ -78,8 +78,8 @@ class Screen:
         # Background of Main Ship
         self.screen.blit(
             PlayerShip.load_ship_background(),
-            (self.main_ship.rect.x, self.main_ship.rect.y -
-             self.main_ship.rect.size[1] / 5))
+            (self.main_ship.rect.x + 18, self.main_ship.rect.y -
+             self.main_ship.rect.size[1] * 2.35))
 
     def draw_health_bar(self) -> None:
         """
@@ -162,6 +162,8 @@ class Screen:
         """
         Responsible for running the main loop of the game.
         """
+        count = 0
+
         self.game_timer.start()
         while self.game_running and self.running:
 
@@ -190,8 +192,14 @@ class Screen:
 
             # collision check
             for projectile in self.projectile_container.get_launched():
+                # print(projectile.rect.x, self.main_ship.rect.x, projectile.rect.y == self.main_ship.rect.y)
+                print(pygame.sprite.collide_rect(self.player, projectile))
+                if pygame.sprite.collide_rect(self.player, projectile):
+                    count += 1
+                    self.projectile_container.remove(projectile)
                 if projectile.get_y() >= Settings.SEA_LEVEL:
                     self.projectile_container.remove(projectile)
+            print("count:", count)
 
     def run(self):
         """
