@@ -68,6 +68,10 @@ class Player(pygame.sprite.Sprite):
             if self.rect.y > self.INITIAL_COORDINATES[1]:
                 self.rect.y = self.INITIAL_COORDINATES[1]
                 self.jumping = False
+                if self.direction == "LEFT_JUMP":
+                    self.direction = "LEFT"
+                else:
+                    self.direction = "RIGHT"
 
         return self.rect.y
 
