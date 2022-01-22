@@ -14,6 +14,7 @@ class Timer:
         self.time = time.time()
         self.is_set = False
 
+
     def get_time(self):
         """
         Returns the current value of time.
@@ -35,3 +36,4 @@ class Timer:
 
     def stop(self):
         self.is_set = False
+
