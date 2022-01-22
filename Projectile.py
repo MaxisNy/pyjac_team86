@@ -2,9 +2,20 @@ from Timer import Timer
 import pygame
 import random
 import math
+import os
 
 
-class Projectile:
+def load_image(img_name: str, width: int = 1280,
+               height: int = 720) -> pygame.image:
+    """
+    Return a pygame img of the PNG img_name that has been scaled according
+    to the given width and size
+    """
+    img = pygame.image.load(img_name).convert_alpha()
+    return pygame.transform.scale(img, (width, height))
+
+
+class Projectile(pygame.sprite.Sprite):
 
     INITIAL_COORDINATES = (780, 600)
     ACCELERATION = 50
@@ -15,6 +26,7 @@ class Projectile:
     ANGLE = 60
 
     def __init__(self, side):
+        super().__init__()
         self.x_0 = self.get_init_coords(side)
         self.y_0 = 600
         # TODO: adjust the range of velocities
@@ -22,6 +34,8 @@ class Projectile:
         self._timer = Timer()
         self.launched = False
         self.side = side
+        self.image = load_image(os.path.join("sprites", "projectile.png"))
+        self.rect = self.image.get_rect()
 
     def get_init_coords(self, side):
         if side:
