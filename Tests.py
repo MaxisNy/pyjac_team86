@@ -1,4 +1,5 @@
 import unittest
+import Settings
 from Player import Player
 
 
@@ -13,7 +14,7 @@ class PlayerTests(unittest.TestCase):
         """ tests correctness of getter methods """
         self.assertEqual(self.p.get_x(), self.p.INITIAL_COORDINATES[0])
         self.assertEqual(self.p.get_y(), self.p.INITIAL_COORDINATES[1])
-        self.assertEqual(self.p.get_speed(), self.p.BLOCK_DOWN_SPEED)
+        self.assertEqual(self.p.get_speed(), Settings.PLAYER_BLOCK_DOWN_SPEED)
 
     def test_move_left(self):
         """ tests leftward movement """
@@ -30,9 +31,9 @@ class PlayerTests(unittest.TestCase):
     def test_block(self):
         """ tests defensive mode """
         self.p.block_up()
-        self.assertEqual(self.p.get_speed(), self.p.BLOCK_UP_SPEED)
+        self.assertEqual(self.p.get_speed(), Settings.PLAYER_BLOCK_UP_SPEED)
         self.p.block_down()
-        self.assertEqual(self.p.get_speed(), self.p.BLOCK_DOWN_SPEED)
+        self.assertEqual(self.p.get_speed(), Settings.PLAYER_BLOCK_DOWN_SPEED)
 
 
 if __name__ == '__main__':
