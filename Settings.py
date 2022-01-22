@@ -5,6 +5,7 @@ ENEMY_SHIP_IMG = "./sprites/enemy_ship.png"
 PLAYER_SHIP_IMG = "./sprites/player_ship_3.png"
 PLAYER_SHIP_BG_IMG = "./sprites/ship_background.png"
 HEART_IMG = "./sprites/heart.png"
+PROJECTILE_IMG = "./sprites/projectile.png"
 intro_text1 = "Yo ho ho! Ahoy heartie! " \
               "The scallywags are trying " \
               "t' scuttle the wit' thar chase guns. " \
