@@ -1,11 +1,24 @@
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1800
+
 BACKGROUND_IMG = "./sprites/bg2.png"
 ENEMY_SHIP_IMG = "./sprites/enemy_ship.png"
 PLAYER_SHIP_IMG = "./sprites/player_ship_3.png"
 PLAYER_SHIP_BG_IMG = "./sprites/ship_background.png"
 HEART_IMG = "./sprites/heart.png"
+
+# projectiles
 PROJECTILE_IMG = "./sprites/projectile.png"
+
+# player
+PLAYER_BLOCK_DOWN_SPEED = 4
+PLAYER_BLOCK_UP_SPEED = 1
+PLAYER_JUMP_SPEED = 450
+PLAYER_ACCELERATION = 600
+PLAYER_IMG = "./sprites/player_left.png"
+PLAYER_BLOCK_IMG = "./sprites/player_block.png"
+PLAYER_JUMP_IMG = "./sprites/player_jump.png"
+
 intro_text1 = "Yo ho ho! Ahoy heartie! " \
               "The scallywags are trying " \
               "t' scuttle the wit' thar chase guns. " \
