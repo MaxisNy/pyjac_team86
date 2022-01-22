@@ -4,6 +4,8 @@ import Settings
 from Timer import Timer
 from Ship import Ship, EnemyShip, PlayerShip
 from load_img import load_image
+from Player import Player
+from ProjectileContainer import ProjectileContainer
 
 
 class Screen:
@@ -46,10 +48,26 @@ class Screen:
         """
         Initializes all the game actors
         """
+        self.player = Player()
+
         ships = Ship.initialize_game_ships()
         self.main_ship = ships[1]
         self.actors.add(ships[0], ships[1], ships[2])
-        self.actors.add()
+
+        self.projectile_container = ProjectileContainer()
+        self.projectile_container.generate(Settings.NUM_OF_PROJECTILES)
+
+    def draw(self) -> None:
+        """
+        Draw all the game elements.
+        """
+        self.draw_background()
+        self.actors.draw(self.screen)
+        self.player.draw(self.screen)
+        self.draw_projectiles()
+        self.draw_health_bar()
+        self.draw_elapsed_time()
+        pygame.display.update()
 
     def draw_background(self) -> None:
         """
@@ -117,6 +135,13 @@ class Screen:
         text_rect.center = (self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 4)
         self.screen.blit(text, text_rect)
 
+    def draw_projectiles(self):
+        """
+        Responsible for drawing projectiles.
+        """
+        for projectile in self.projectile_container.get_launched():
+            projectile.draw(self.screen)
+
     def run_intro(self):
         """
         Responsible for running the game introduction.
@@ -139,16 +164,34 @@ class Screen:
         """
         self.game_timer.start()
         while self.game_running and self.running:
+
+            if self.projectile_container.get_size():
+                self.projectile_container.launch()
+
+            self.draw()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.game_running = False
                     self.running = False
-                    pygame.quit()
-            self.draw_background()
-            self.actors.draw(self.screen)
-            self.draw_health_bar()
-            self.draw_elapsed_time()
-            pygame.display.update()
+                    quit()
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_a] and self.player.get_x() > 0:
+                self.player.move_left()
+            if keys[pygame.K_d] and self.player.get_x() < Settings.SCREEN_WIDTH:
+                self.player.move_right()
+            if keys[pygame.K_SPACE]:
+                self.player.jump()
+            if keys[pygame.K_LSHIFT]:
+                self.player.block_up()
+            else:
+                self.player.block_down()
+
+            # collision check
+            for projectile in self.projectile_container.get_launched():
+                if projectile.get_y() >= Settings.SEA_LEVEL:
+                    self.projectile_container.remove(projectile)
 
     def run(self):
         """
