@@ -9,4 +9,4 @@ def load_image(img_name: str, width: int = Settings.SCREEN_WIDTH,
     to the given width and size
     """
     img = pygame.image.load(img_name).convert_alpha()
-    return pygame.transform.scale(img, (width, height))
+    return pygame.transform.scale(img, (int(width), int(height)))
