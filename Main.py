@@ -54,9 +54,6 @@ class Screen:
         self.main_ship = ships[1]
         self.actors.add(ships[0], ships[1], ships[2])
 
-        self.projectile_container = ProjectileContainer()
-        self.projectile_container.generate(Settings.NUM_OF_PROJECTILES)
-
     def draw(self) -> None:
         """
         Draw all the game elements.
@@ -157,6 +154,20 @@ class Screen:
                     self.running = False
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
+                    if event.type == pygame.KEYDOWN:
+                        correct_input = False
+                        print(event.key)
+                        while not correct_input:
+                            if event.key == pygame.K_a:
+                                difficulty = "EASY"
+                                correct_input = True
+                            elif event.key == pygame.K_b:
+                                difficulty = "NORMAL"
+                                correct_input = True
+                            elif event.key == pygame.K_c:
+                                difficulty = "HARD"
+                                correct_input = True
+                    self.projectile_container = ProjectileContainer(difficulty)
                     self.intro_running = False
             self.screen.blit(self.background, (0, 0))
             self.draw_intro_text()
@@ -168,6 +179,8 @@ class Screen:
         """
         count = 0
 
+        self.projectile_container.generate()
+
         # self.game_timer.start()
         while self.game_running and self.running:
 
@@ -175,6 +188,7 @@ class Screen:
                 self.projectile_container.launch()
 
             self.draw()
+            print(self.projectile_container.difficulty)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -183,9 +197,11 @@ class Screen:
                     quit()
 
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_a] and self.player.get_x() > 0:
+            if keys[pygame.K_a] and self.player.get_x() > \
+                    self.main_ship.rect.x:
                 self.player.move_left()
-            if keys[pygame.K_d] and self.player.get_x() < Settings.SCREEN_WIDTH:
+            if keys[pygame.K_d] and self.player.get_x() < \
+                    self.main_ship.rect.x + self.main_ship.rect.width - 50:
                 self.player.move_right()
             if keys[pygame.K_LSHIFT]:
                 self.player.block_up()
@@ -203,6 +219,7 @@ class Screen:
                     self.projectile_container.remove(projectile)
                 if pygame.sprite.collide_rect(self.main_ship, projectile):
                     self.projectile_container.remove(projectile)
+                    self.main_ship.damage()
                 if projectile.get_y() >= Settings.SEA_LEVEL:
                     self.projectile_container.remove(projectile)
             print("count:", count)

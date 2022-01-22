@@ -90,20 +90,11 @@ class PlayerShip(Ship):
                           int(2 * Settings.SCREEN_WIDTH // 4),
                           int(Settings.SCREEN_WIDTH // 4))
 
-    def damage(self, sprite: pygame.Sprite.sprite) -> None:
+    def damage(self) -> None:
         """
         Lowers ship_health if the ship is damaged.
         """
-        if self.is_hit(sprite):
-            self.ship_health -= 1
-
-    def is_hit(self, sprite: pygame.Sprite.sprite) -> bool:
-        """
-        Returns whether the ship has been hit
-        """
-        if self.rect.colliderect(sprite.rect):
-            return True
-        return False
+        self.ship_health -= 1
 
     def get_ship_health(self) -> int:
         """

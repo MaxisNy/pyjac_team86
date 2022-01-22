@@ -8,10 +8,26 @@ class ProjectileContainer:
 
     _projectiles: List[Projectile]
 
-    def __init__(self):
+    def __init__(self, difficulty: str):
+        self.difficulty = difficulty
         self._projectiles = []
-        self.cooldown = 1.00
+        self.cooldown = self.init_cooldown()
+        self.size = self.init_size()
         self.timer = Timer()
+
+    def init_cooldown(self):
+        if self.difficulty == "EASY":
+            return 3.00
+        if self.difficulty == "NORMAL":
+            return 2.50
+        return 1.50
+
+    def init_size(self):
+        if self.difficulty == "EASY":
+            return 15
+        if self.difficulty == "NORMAL":
+            return 25
+        return 45
 
     def get_size(self):
         return len(self._projectiles)
@@ -26,12 +42,12 @@ class ProjectileContainer:
                 launched_projectiles.append(projectile)
         return launched_projectiles
 
-    def generate(self, size: int):
+    def generate(self):
         """
         Populates this ProjectileContainer with Projectile objects.
         :param size: number of Projectiles created
         """
-        for i in range(size):
+        for i in range(self.size):
             projectile = Projectile(random.randint(0, 1))
             self._projectiles.append(projectile)
 
