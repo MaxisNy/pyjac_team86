@@ -18,7 +18,7 @@ class Screen:
     intro_running: bool
     running: bool
     actors: pygame.sprite.Group
-    main_ship: Ship
+    main_ship: PlayerShip
     game_timer: Timer
     best_time: float
 
@@ -106,6 +106,16 @@ class Screen:
             text_rect1.center = (self.SCREEN_WIDTH // 2, height)
             height += 3 * text_rect1.size[1]
             self.screen.blit(temp_text, text_rect1)
+
+    def draw_paused_text(self):
+        """
+        Responsible for drawing the text while game is paused.
+        """
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        text = font.render(Settings.paused_text, True, Settings.DARK_GRAY)
+        text_rect = text.get_rect()
+        text_rect.center = (self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 4)
+        self.screen.blit(text, text_rect)
 
     def run_intro(self):
         """

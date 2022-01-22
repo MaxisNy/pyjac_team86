@@ -7,7 +7,7 @@ PLAYER_SHIP_BG_IMG = "./sprites/ship_background.png"
 HEART_IMG = "./sprites/heart.png"
 intro_text1 = "Yo ho ho! Ahoy heartie! " \
               "The scallywags are trying " \
-              "t' scuttle yer ship wit' thar chase guns. " \
+              "t' scuttle the wit' thar chase guns. " \
               "Protect the ship as long as ye can, arr."
 intro_text2 = "How to play:"
 intro_text3 = "Press the [W] key to jump"
