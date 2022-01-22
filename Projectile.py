@@ -4,18 +4,14 @@ from load_img import load_image
 import pygame
 import random
 import math
-import os
 
 
 class Projectile(pygame.sprite.Sprite):
 
     INITIAL_COORDINATES = (780, 600)
-    ACCELERATION = 50
 
     WIDTH = 20
     HEIGHT = 20
-
-    ANGLE = 60
 
     def __init__(self, side):
         super().__init__()
@@ -25,8 +21,8 @@ class Projectile(pygame.sprite.Sprite):
         self.launched = False
         self.side = side
         self.image = load_image(
-            Settings.PROJECTILE_IMG, Settings.SCREEN_WIDTH // 35,
-            Settings.SCREEN_WIDTH // 35)
+            Settings.PROJECTILE_IMG, Settings.SCREEN_WIDTH // 50,
+            Settings.SCREEN_WIDTH // 50)
         self.rect = self.image.get_rect()
         self.rect.x = self.get_init_coords(side)
         self.rect.y = 600
@@ -38,14 +34,14 @@ class Projectile(pygame.sprite.Sprite):
 
     def get_x(self, side):
         return self.rect.x + ((-1)**side) * self.velocity * \
-               math.cos(self.ANGLE * math.pi / 180) * \
+               math.cos(Settings.PROJECTILE_ANGLE * math.pi / 180) * \
                self._timer.get_time_elapsed()
 
     def get_y(self):
         return self.rect.y - \
-               self.velocity * math.sin(self.ANGLE * math.pi / 180) * \
+               self.velocity * math.sin(Settings.PROJECTILE_ANGLE * math.pi / 180) * \
                self._timer.get_time_elapsed() + \
-               (self.ACCELERATION * (self._timer.get_time_elapsed() ** 2) / 2)
+               (Settings.PROJECTILE_ACCELERATION * (self._timer.get_time_elapsed() ** 2) / 2)
 
     def draw(self, screen):
         """
