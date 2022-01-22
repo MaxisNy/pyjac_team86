@@ -194,7 +194,7 @@ class Screen:
             for projectile in self.projectile_container.get_launched():
                 # print(projectile.rect.x, self.main_ship.rect.x, projectile.rect.y == self.main_ship.rect.y)
                 print(pygame.sprite.collide_rect(self.player, projectile))
-                if pygame.sprite.collide_rect(self.player, projectile):
+                if pygame.sprite.collide_rect(self.player, projectile) and self.player.block:
                     count += 1
                     self.projectile_container.remove(projectile)
                 if projectile.get_y() >= Settings.SEA_LEVEL:
