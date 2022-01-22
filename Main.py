@@ -66,7 +66,7 @@ class Screen:
         self.player.draw(self.screen)
         self.draw_projectiles()
         self.draw_health_bar()
-        self.draw_elapsed_time()
+        # self.draw_elapsed_time()
         pygame.display.update()
 
     def draw_background(self) -> None:
@@ -142,6 +142,10 @@ class Screen:
         for projectile in self.projectile_container.get_launched():
             projectile.draw(self.screen)
 
+    def draw_explosion(self, x, y):
+        img = load_image(Settings.EXPLOSION_IMG, Settings.SCREEN_WIDTH // 60, (29 / 28) * Settings.SCREEN_WIDTH // 60)
+        self.screen.blit(img, (x, y))
+
     def run_intro(self):
         """
         Responsible for running the game introduction.
@@ -164,7 +168,7 @@ class Screen:
         """
         count = 0
 
-        self.game_timer.start()
+        # self.game_timer.start()
         while self.game_running and self.running:
 
             if self.projectile_container.get_size():
@@ -196,6 +200,8 @@ class Screen:
                 print(pygame.sprite.collide_rect(self.player, projectile))
                 if pygame.sprite.collide_rect(self.player, projectile) and self.player.block:
                     count += 1
+                    self.projectile_container.remove(projectile)
+                if pygame.sprite.collide_rect(self.main_ship, projectile):
                     self.projectile_container.remove(projectile)
                 if projectile.get_y() >= Settings.SEA_LEVEL:
                     self.projectile_container.remove(projectile)
