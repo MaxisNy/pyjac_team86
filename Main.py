@@ -23,6 +23,8 @@ class Screen:
     main_ship: PlayerShip
     game_timer: Timer
     best_time: float
+    player: Player
+    projectile_container: ProjectileContainer
 
     def __init__(self) -> None:
         """
@@ -43,6 +45,8 @@ class Screen:
         self.background = load_image(Settings.BACKGROUND_IMG)
         self.game_timer = Timer()
         self.best_time = 0
+        self.win_running = False
+        self.lose_running = False
 
     def _initialize_actors(self) -> None:
         """
@@ -63,7 +67,7 @@ class Screen:
         self.player.draw(self.screen)
         self.draw_projectiles()
         self.draw_health_bar()
-        # self.draw_elapsed_time()
+        self.draw_remaining_projectiles()
         pygame.display.update()
 
     def draw_background(self) -> None:
@@ -86,27 +90,18 @@ class Screen:
         for i in range(0, self.main_ship.get_ship_health()):
             self.screen.blit(heart, (10 + 55*i, 10))
 
-    def draw_elapsed_time(self) -> None:
+    def draw_remaining_projectiles(self) -> None:
         """
         Draws the elapsed time since the game started.
         """
-        current_time = self.game_timer.get_time_elapsed()
-        if current_time > self.best_time:
-            self.best_time = current_time
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render(("Time: {0:.1f}".format(
-            current_time)), True, Settings.BLACK)
-        font2 = pygame.font.Font('freesansbold.ttf', 32)
-        text2 = font.render("Best time {0:.1f}".format(self.best_time), True,
-                            Settings.LIGHT_GRAY)
+        text = font.render(
+            (str('some number') + " / " + str('some other number')), True,
+            Settings.BLACK)
         text_rect = text.get_rect()
         text_rect.x = self.SCREEN_WIDTH - text_rect.size[0]
         text_rect.y = 0
-        text_rect2 = text2.get_rect()
-        text_rect2.x = self.SCREEN_WIDTH - text_rect2.size[0]
-        text_rect2.y = 10 + text_rect.size[1]
         self.screen.blit(text, text_rect)
-        self.screen.blit(text2, text_rect2)
 
     def draw_intro_text(self):
         """
@@ -131,6 +126,26 @@ class Screen:
         text_rect = text.get_rect()
         text_rect.center = (self.SCREEN_WIDTH // 2, self.SCREEN_HEIGHT // 4)
         self.screen.blit(text, text_rect)
+
+    def draw_win_text(self):
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        height = self.SCREEN_HEIGHT // 6
+        for text in Settings.win_texts:
+            temp_text = font.render(text, True, Settings.DARK_GRAY)
+            text_rect1 = temp_text.get_rect()
+            text_rect1.center = (self.SCREEN_WIDTH // 2, height)
+            height += 4 * text_rect1.size[1]
+            self.screen.blit(temp_text, text_rect1)
+
+    def draw_lose_text(self):
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        height = self.SCREEN_HEIGHT // 6
+        for text in Settings.lose_texts:
+            temp_text = font.render(text, True, Settings.DARK_GRAY)
+            text_rect1 = temp_text.get_rect()
+            text_rect1.center = (self.SCREEN_WIDTH // 2, height)
+            height += 7 * text_rect1.size[1]
+            self.screen.blit(temp_text, text_rect1)
 
     def draw_projectiles(self):
         """
@@ -224,13 +239,61 @@ class Screen:
                     self.projectile_container.remove(projectile)
             print("count:", count)
 
+    def run_win_screen(self):
+        """
+        Responsible for running the win screen.
+        """
+        self.win_running = True
+        while self.win_running and self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.win_running = False
+                    self.running = False
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.win_running = False
+                        self.running = False
+                        pygame.quit()
+                    else:
+                        self.win_running = False
+            self.screen.blit(self.background, (0, 0))
+            self.draw_win_text()
+            pygame.display.update()
+
+    def run_lose_screen(self):
+        """
+        Responsible for running the lose screen
+        """
+        self.lose_running = True
+        while self.lose_running and self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.lose_running = False
+                    self.running = False
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.lose_running = False
+                        self.running = False
+                        pygame.quit()
+                    else:
+                        self.lose_running = False
+            self.screen.blit(self.background, (0, 0))
+            self.draw_lose_text()
+            pygame.display.update()
+
     def run(self):
         """
         Responsible for the entire game loop.
         """
+        self.run_intro()
         while self.running:
-            self.run_intro()
             self.run_game()
+            if self.main_ship.get_ship_health() > 0:
+                self.run_win_screen()
+            else:
+                self.run_lose_screen()
 
 
 if __name__ == '__main__':

@@ -38,6 +38,24 @@ intro_text6 = "Block the cannons using your shield, good luck!"
 intro_text7 = "Press any key to continue."
 intro_texts = [intro_text1, intro_text2, intro_text3,
                intro_text4, intro_text5, intro_text6, intro_text7]
+win_screen_text1 = "You win!"
+win_screen_text2 = "Captain LackBeard of The Booty Hauler requests your " \
+                   "humble presence at the bottom of the ocean."
+win_screen_text3 = "RSVP not required. Guests will have to pose " \
+                   "on the plank for pictures."
+win_screen_text4 = "Sharks may escort you in the downward travel."
+win_screen_text5 = "Press [ESC] to quit!"
+win_screen_text6 = "Press any other key to restart!"
+win_texts = [win_screen_text1, win_screen_text2, win_screen_text3,
+             win_screen_text4, win_screen_text5, win_screen_text6]
+lose_screen_text1 = "You lost."
+lose_screen_text2 = "Captain LackBeard of the Booty Hauler " \
+                    "sank to the bottom of the ocean."
+lose_screen_text3 = "Press [ESC] to give up and quit."
+lose_screen_text4 = "Press any other key to restart!"
+lose_texts = [lose_screen_text1, lose_screen_text2, lose_screen_text3,
+              lose_screen_text4]
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARK_GRAY = (40, 40, 40)
