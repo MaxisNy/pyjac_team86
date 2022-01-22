@@ -183,12 +183,12 @@ class Screen:
                 self.player.move_left()
             if keys[pygame.K_d] and self.player.get_x() < Settings.SCREEN_WIDTH:
                 self.player.move_right()
-            if keys[pygame.K_SPACE]:
-                self.player.jump()
             if keys[pygame.K_LSHIFT]:
                 self.player.block_up()
             else:
                 self.player.block_down()
+                if keys[pygame.K_SPACE]:
+                    self.player.jump()
 
             # collision check
             for projectile in self.projectile_container.get_launched():
