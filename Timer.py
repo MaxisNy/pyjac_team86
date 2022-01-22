@@ -35,3 +35,4 @@ class Timer:
 
     def stop(self):
         self.is_set = False
+
