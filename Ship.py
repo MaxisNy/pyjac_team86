@@ -41,7 +41,7 @@ class Ship(pygame.sprite.Sprite):
             (Settings.SCREEN_WIDTH - distance_from_wall - enemy_ship_size_x)
         right_ship.rect.y = (Settings.SCREEN_HEIGHT / 2)
         main_ship.rect.x = (Settings.SCREEN_WIDTH / 2) - player_ship_size_x / 2
-        main_ship.rect.y = (Settings.SCREEN_HEIGHT / 2) - (player_ship_size_y / 4)
+        main_ship.rect.y = (Settings.SCREEN_HEIGHT // 1.4)
         return left_ship, main_ship, right_ship
 
 
@@ -78,7 +78,7 @@ class PlayerShip(Ship):
         """
         Gets the image of the ship.
         """
-        img = load_image(Settings.PLAYER_SHIP_IMG, int(2 * Settings.SCREEN_WIDTH // 4), int(Settings.SCREEN_WIDTH // 4))
+        img = load_image(Settings.PLAYER_SHIP_IMG, int(5.4 * Settings.SCREEN_WIDTH // 11), int(Settings.SCREEN_WIDTH // 11))
         return pygame.transform.flip(img, flipped, False)
 
     @staticmethod
