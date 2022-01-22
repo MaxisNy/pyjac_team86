@@ -170,10 +170,9 @@ if __name__ == '__main__':
         if keys[pygame.K_d] and p.get_x() + p.WIDTH < WIDTH:
             p.move_right()
 
-        if keys[pygame.K_SPACE]:
-            p.jump()
-
         if keys[pygame.K_LSHIFT]:
             p.block_up()
         else:
             p.block_down()
+            if keys[pygame.K_SPACE]:
+                p.jump()
