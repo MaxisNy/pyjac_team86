@@ -10,7 +10,7 @@ class ProjectileContainer:
 
     def __init__(self):
         self._projectiles = []
-        self.cooldown = 2.00
+        self.cooldown = 1.00
         self.timer = Timer()
 
     def get_size(self):
@@ -41,7 +41,7 @@ class ProjectileContainer:
         loads one of the cannons, waits, and shoots (launches) one of the
         projectiles.
         """
-        print(self.cooldown - self.timer.get_time_elapsed())
+        # print(self.cooldown - self.timer.get_time_elapsed())
         if self.timer.is_set:
             if self.timer.get_time_elapsed() >= self.cooldown:
 
