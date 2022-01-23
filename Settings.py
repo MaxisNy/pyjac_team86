@@ -35,10 +35,9 @@ intro_text3 = "Press the [W] key to jump"
 intro_text4 = "Press the [A] key to move left and [D] to move right."
 intro_text5 = "Press the [Shift] key to use your shield."
 intro_text6 = "Block the cannons using your shield, good luck!"
-intro_text7 = "Press any key to continue."
 intro_text8 = "Press E for Easy, N for Normal, and H for Hard"
 intro_texts = [intro_text1, intro_text2, intro_text3,
-               intro_text4, intro_text5, intro_text6, intro_text7, intro_text8]
+               intro_text4, intro_text5, intro_text6, intro_text8]
 win_screen_text1 = "You win!"
 win_screen_text2 = "Captain LackBeard of The Booty Hauler requests your " \
                    "humble presence at the bottom of the ocean."
