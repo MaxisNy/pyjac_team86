@@ -15,7 +15,7 @@ class Projectile(pygame.sprite.Sprite):
     def __init__(self, side):
         super().__init__()
         # TODO: adjust the range of velocities
-        self.velocity = random.randint(150, 200)
+        self.velocity = random.randint(200, 250)
         self._timer = Timer()
         self.launched = False
         self._style = "PROJECTILE"

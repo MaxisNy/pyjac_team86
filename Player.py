@@ -14,8 +14,6 @@ class Player(pygame.sprite.Sprite):
     WIDTH = 50
     HEIGHT = 70
 
-    INITIAL_COORDINATES = (300.00, 500.00)   # Player's coordinates as the game starts
-
     x: int  # Player's x coordinate
     y: int  # Player's y coordinate
     block: bool  # True if the shield is up, False otherwise
@@ -36,8 +34,8 @@ class Player(pygame.sprite.Sprite):
         self.images = self.generate_player_images()
         self.direction = "LEFT"
         self.rect = self.images["LEFT"].get_rect()
-        self.rect.x = self.INITIAL_COORDINATES[0]
-        self.rect.y = self.INITIAL_COORDINATES[1]
+        self.rect.x = Settings.PLAYER_INITIAL_COORDINATES[0]
+        self.rect.y = Settings.PLAYER_INITIAL_COORDINATES[1]
 
     @staticmethod
     def generate_player_images() -> Dict:
@@ -59,14 +57,14 @@ class Player(pygame.sprite.Sprite):
         Returns Player's y coordinate.
         """
         if self.jumping:
-            self.rect.y = self.INITIAL_COORDINATES[1] - \
-                         (self.speed_ver * self.timer.get_time_elapsed()) + \
-                         (Settings.PLAYER_ACCELERATION *
+            self.rect.y = Settings.PLAYER_INITIAL_COORDINATES[1] - \
+                          (self.speed_ver * self.timer.get_time_elapsed()) + \
+                          (Settings.PLAYER_ACCELERATION *
                           (self.timer.get_time_elapsed()**2) / 2)
 
             # end the jump
-            if self.rect.y > self.INITIAL_COORDINATES[1]:
-                self.rect.y = self.INITIAL_COORDINATES[1]
+            if self.rect.y > Settings.PLAYER_INITIAL_COORDINATES[1]:
+                self.rect.y = Settings.PLAYER_INITIAL_COORDINATES[1]
                 self.jumping = False
                 if self.direction == "LEFT_JUMP":
                     self.direction = "LEFT"

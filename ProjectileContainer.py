@@ -47,6 +47,7 @@ class ProjectileContainer:
         Populates this ProjectileContainer with Projectile objects.
         :param size: number of Projectiles created
         """
+        self._projectiles = []
         for i in range(self.size):
             projectile = Projectile(random.randint(0, 1))
             self._projectiles.append(projectile)
@@ -68,7 +69,7 @@ class ProjectileContainer:
                         break    # allows shooting one projectile at a time
 
                 # decrease cooldown to make the game more challenging
-                self.cooldown -= 0.015
+                self.cooldown -= 0.02
 
                 # reset the timer
                 self.timer.start()

@@ -11,7 +11,7 @@ HEART_IMG = "./sprites/heart.png"
 # projectiles
 NUM_OF_PROJECTILES = 30
 PROJECTILE_ACCELERATION = 50
-PROJECTILE_ANGLE = 60
+PROJECTILE_ANGLE = 70
 INITIAL_PROJECTILE_HEIGHT = 550
 PROJECTILE_IMG = "./sprites/projectile.png"
 EXPLOSION_IMG = "./sprites/explosion.png"
@@ -21,7 +21,7 @@ PLAYER_BLOCK_DOWN_SPEED = 4
 PLAYER_BLOCK_UP_SPEED = 1
 PLAYER_JUMP_SPEED = 450
 PLAYER_ACCELERATION = 600
-PLAYER_INITIAL_COORDINATES = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.585)
+PLAYER_INITIAL_COORDINATES = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.6)
 PLAYER_IMG = "./sprites/player_left.png"
 PLAYER_BLOCK_IMG = "./sprites/player_block.png"
 PLAYER_JUMP_IMG = "./sprites/player_jump.png"
@@ -36,8 +36,9 @@ intro_text4 = "Press the [A] key to move left and [D] to move right."
 intro_text5 = "Press the [Shift] key to use your shield."
 intro_text6 = "Block the cannons using your shield, good luck!"
 intro_text7 = "Press any key to continue."
+intro_text8 = "Press E for Easy, N for Normal, and H for Hard"
 intro_texts = [intro_text1, intro_text2, intro_text3,
-               intro_text4, intro_text5, intro_text6, intro_text7]
+               intro_text4, intro_text5, intro_text6, intro_text7, intro_text8]
 win_screen_text1 = "You win!"
 win_screen_text2 = "Captain LackBeard of The Booty Hauler requests your " \
                    "humble presence at the bottom of the ocean."

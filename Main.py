@@ -63,8 +63,8 @@ class Screen:
         Draw all the game elements.
         """
         self.draw_background()
-        self.actors.draw(self.screen)
         self.player.draw(self.screen)
+        self.actors.draw(self.screen)
         self.draw_projectiles()
         self.draw_health_bar()
         self.draw_remaining_projectiles()
@@ -96,7 +96,7 @@ class Screen:
         """
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render(
-            (str('some number') + " / " + str('some other number')), True,
+            ("Remaining: " + str(self.projectile_container.get_size()) + " / " + str(self.projectile_container.size)), True,
             Settings.BLACK)
         text_rect = text.get_rect()
         text_rect.x = self.SCREEN_WIDTH - text_rect.size[0]
@@ -173,13 +173,13 @@ class Screen:
                         correct_input = False
                         print(event.key)
                         while not correct_input:
-                            if event.key == pygame.K_a:
+                            if event.key == pygame.K_e:
                                 difficulty = "EASY"
                                 correct_input = True
-                            elif event.key == pygame.K_b:
+                            elif event.key == pygame.K_n:
                                 difficulty = "NORMAL"
                                 correct_input = True
-                            elif event.key == pygame.K_c:
+                            elif event.key == pygame.K_h:
                                 difficulty = "HARD"
                                 correct_input = True
                     self.projectile_container = ProjectileContainer(difficulty)
@@ -227,7 +227,6 @@ class Screen:
 
             # collision check
             for projectile in self.projectile_container.get_launched():
-                # print(projectile.rect.x, self.main_ship.rect.x, projectile.rect.y == self.main_ship.rect.y)
                 print(pygame.sprite.collide_rect(self.player, projectile))
                 if pygame.sprite.collide_rect(self.player, projectile) and self.player.block:
                     count += 1
@@ -235,8 +234,13 @@ class Screen:
                 if pygame.sprite.collide_rect(self.main_ship, projectile):
                     self.projectile_container.remove(projectile)
                     self.main_ship.damage()
+                    if self.main_ship.ship_health <= 0:
+                        self.game_running = False
                 if projectile.get_y() >= Settings.SEA_LEVEL:
                     self.projectile_container.remove(projectile)
+
+            if self.projectile_container.get_size() == 0:
+                self.game_running = False
             print("count:", count)
 
     def run_win_screen(self):
@@ -249,14 +253,16 @@ class Screen:
                 if event.type == pygame.QUIT:
                     self.win_running = False
                     self.running = False
-                    pygame.quit()
+                    quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.win_running = False
                         self.running = False
-                        pygame.quit()
+                        quit()
                     else:
                         self.win_running = False
+                        self.game_running = True
+                        self.main_ship.ship_health = 5
             self.screen.blit(self.background, (0, 0))
             self.draw_win_text()
             pygame.display.update()
@@ -271,14 +277,16 @@ class Screen:
                 if event.type == pygame.QUIT:
                     self.lose_running = False
                     self.running = False
-                    pygame.quit()
+                    quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.lose_running = False
                         self.running = False
-                        pygame.quit()
+                        quit()
                     else:
                         self.lose_running = False
+                        self.game_running = True
+                        self.main_ship.ship_health = 5
             self.screen.blit(self.background, (0, 0))
             self.draw_lose_text()
             pygame.display.update()
