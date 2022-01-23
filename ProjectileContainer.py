@@ -5,24 +5,39 @@ import random
 
 
 class ProjectileContainer:
-
+    """
+    The Projectile Container class.
+    """
+    _timer: Timer
     _projectiles: List[Projectile]
+    difficulty: str
+    cooldown: float
+    size: int
 
     def __init__(self, difficulty: str):
+        """
+        The Projectile Container constructor.
+        """
         self.difficulty = difficulty
         self._projectiles = []
         self.cooldown = self.init_cooldown()
         self.size = self.init_size()
-        self.timer = Timer()
+        self._timer = Timer()
 
     def init_cooldown(self):
+        """
+        Sets the cooldown depending on the difficulty level.
+        """
         if self.difficulty == "EASY":
-            return 3.00
+            return 4.00
         if self.difficulty == "NORMAL":
-            return 2.50
-        return 1.50
+            return 3.00
+        return 2.50
 
     def init_size(self):
+        """
+        Sets the container size depending on the difficulty level.
+        """
         if self.difficulty == "EASY":
             return 15
         if self.difficulty == "NORMAL":
@@ -30,6 +45,9 @@ class ProjectileContainer:
         return 45
 
     def get_size(self):
+        """
+        Returns the current size of the Projectile Container.
+        """
         return len(self._projectiles)
 
     def get_launched(self):
@@ -58,9 +76,8 @@ class ProjectileContainer:
         loads one of the cannons, waits, and shoots (launches) one of the
         projectiles.
         """
-        # print(self.cooldown - self.timer.get_time_elapsed())
-        if self.timer.is_set:
-            if self.timer.get_time_elapsed() >= self.cooldown:
+        if self._timer.is_set:
+            if self._timer.get_time_elapsed() >= self.cooldown:
 
                 # shoot
                 for projectile in self._projectiles:
@@ -69,12 +86,12 @@ class ProjectileContainer:
                         break    # allows shooting one projectile at a time
 
                 # decrease cooldown to make the game more challenging
-                self.cooldown -= 0.02
+                self.cooldown = self.cooldown * (2.95 / 3)
 
                 # reset the timer
-                self.timer.start()
+                self._timer.start()
         else:
-            self.timer.start()
+            self._timer.start()
 
     def remove(self, projectile: Projectile):
         """

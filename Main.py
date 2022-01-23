@@ -1,8 +1,7 @@
-from typing import List
 import pygame
 import Settings
 from Timer import Timer
-from Ship import Ship, EnemyShip, PlayerShip
+from Ship import Ship, PlayerShip
 from load_img import load_image
 from Player import Player
 from ProjectileContainer import ProjectileContainer
@@ -86,7 +85,8 @@ class Screen:
         """
         Draws the health bar of the ship.
         """
-        heart = load_image(Settings.HEART_IMG, self.SCREEN_WIDTH // 30, self.SCREEN_WIDTH // 30)
+        heart = load_image(Settings.HEART_IMG, self.SCREEN_WIDTH // 30,
+                           self.SCREEN_WIDTH // 30)
         for i in range(0, self.main_ship.get_ship_health()):
             self.screen.blit(heart, (10 + 55*i, 10))
 
@@ -96,7 +96,8 @@ class Screen:
         """
         font = pygame.font.Font('freesansbold.ttf', 32)
         text = font.render(
-            ("Remaining: " + str(self.projectile_container.get_size()) + " / " + str(self.projectile_container.size)), True,
+            ("Remaining: " + str(self.projectile_container.get_size()) + " / "
+             + str(self.projectile_container.size)), True,
             Settings.BLACK)
         text_rect = text.get_rect()
         text_rect.x = self.SCREEN_WIDTH - text_rect.size[0]
@@ -128,6 +129,9 @@ class Screen:
         self.screen.blit(text, text_rect)
 
     def draw_win_text(self):
+        """
+        Responsible for drawing the text when the player wins.
+        """
         font = pygame.font.Font('freesansbold.ttf', 25)
         height = self.SCREEN_HEIGHT // 6
         for text in Settings.win_texts:
@@ -138,6 +142,9 @@ class Screen:
             self.screen.blit(temp_text, text_rect1)
 
     def draw_lose_text(self):
+        """
+        Responsible for drawing the text when the player loses.
+        """
         font = pygame.font.Font('freesansbold.ttf', 25)
         height = self.SCREEN_HEIGHT // 6
         for text in Settings.lose_texts:
@@ -155,7 +162,8 @@ class Screen:
             projectile.draw(self.screen)
 
     def draw_explosion(self, x, y):
-        img = load_image(Settings.EXPLOSION_IMG, Settings.SCREEN_WIDTH // 60, (29 / 28) * Settings.SCREEN_WIDTH // 60)
+        img = load_image(Settings.EXPLOSION_IMG, Settings.SCREEN_WIDTH // 60,
+                         (29 / 28) * Settings.SCREEN_WIDTH // 60)
         self.screen.blit(img, (x, y))
 
     def run_intro(self):
@@ -171,7 +179,6 @@ class Screen:
                 if event.type == pygame.KEYDOWN:
                     if event.type == pygame.KEYDOWN:
                         correct_input = False
-                        print(event.key)
                         while not correct_input:
                             if event.key == pygame.K_e:
                                 difficulty = "EASY"
@@ -192,18 +199,13 @@ class Screen:
         """
         Responsible for running the main loop of the game.
         """
-        count = 0
-
         self.projectile_container.generate()
-
-        # self.game_timer.start()
         while self.game_running and self.running:
 
             if self.projectile_container.get_size():
                 self.projectile_container.launch()
 
             self.draw()
-            print(self.projectile_container.difficulty)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -227,9 +229,8 @@ class Screen:
 
             # collision check
             for projectile in self.projectile_container.get_launched():
-                print(pygame.sprite.collide_rect(self.player, projectile))
-                if pygame.sprite.collide_rect(self.player, projectile) and self.player.block:
-                    count += 1
+                if pygame.sprite.collide_rect(self.player, projectile) and \
+                        self.player.block:
                     self.projectile_container.remove(projectile)
                 if pygame.sprite.collide_rect(self.main_ship, projectile):
                     self.projectile_container.remove(projectile)
@@ -241,7 +242,6 @@ class Screen:
 
             if self.projectile_container.get_size() == 0:
                 self.game_running = False
-            print("count:", count)
 
     def run_win_screen(self):
         """

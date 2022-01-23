@@ -8,13 +8,21 @@ import math
 
 
 class Projectile(pygame.sprite.Sprite):
+    """
+    The Projectile class.
+    """
+    _style = str
+    _timer: Timer
+    velocity: int
+    launched: bool
+    side: int
+    images: dict
 
-    WIDTH = 20
-    HEIGHT = 20
-
-    def __init__(self, side):
+    def __init__(self, side: int):
+        """
+        The Projectile constructor.
+        """
         super().__init__()
-        # TODO: adjust the range of velocities
         self.velocity = random.randint(200, 250)
         self._timer = Timer()
         self.launched = False
@@ -25,7 +33,12 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.x = self.get_init_coords(side)
         self.rect.y = Settings.INITIAL_PROJECTILE_HEIGHT
 
-    def generate_projectile_images(self) -> Dict:
+    @staticmethod
+    def generate_projectile_images() -> Dict:
+        """
+        Returns a dictionary of projectile images that relate
+        to different states.
+        """
         return {
             "PROJECTILE": load_image(Settings.PROJECTILE_IMG,
                                      (29 / 28) * Settings.SCREEN_WIDTH // 60,
@@ -34,18 +47,28 @@ class Projectile(pygame.sprite.Sprite):
                                     Settings.SCREEN_WIDTH // 60,
                                     (29 / 28) * Settings.SCREEN_WIDTH // 60)}
 
-    def get_init_coords(self, side):
+    @staticmethod
+    def get_init_coords(side):
+        """
+        Returns Projectile x coordinate based on the side it is launched from.
+        """
         if side:
             return Settings.SCREEN_WIDTH - 230
         return 225
 
     def get_x(self, side):
+        """
+        Returns the x coordinate of this Projectile.
+        """
         self.rect.x = self.get_init_coords(side) + ((-1) ** side) * self.velocity * \
                 math.cos(Settings.PROJECTILE_ANGLE * math.pi / 180) * \
                 self._timer.get_time_elapsed()
         return self.rect.x
 
     def get_y(self):
+        """
+        Returns the y coordinate of this Projectile.
+        """
         self.rect.y = Settings.INITIAL_PROJECTILE_HEIGHT - \
                self.velocity * math.sin(Settings.PROJECTILE_ANGLE * math.pi / 180) * \
                self._timer.get_time_elapsed() + \
@@ -53,6 +76,9 @@ class Projectile(pygame.sprite.Sprite):
         return self.rect.y
 
     def get_style(self):
+        """
+        Returns the style of this Projectile.
+        """
         return self._style
 
     def draw(self, screen):
@@ -62,6 +88,9 @@ class Projectile(pygame.sprite.Sprite):
         screen.blit(self.images[self._style], (self.get_x(self.side), self.get_y()))
 
     def launch(self):
+        """
+        Begins the launching sequence.
+        """
         if not self.launched:
             self.launched = True
             self._timer.start()

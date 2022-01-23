@@ -9,8 +9,10 @@ class Timer:
 
     time: float     # current time
 
-    # TODO: do we need this constructor at all???
     def __init__(self):
+        """
+        The Timer constructor.
+        """
         self.time = time.time()
         self.is_set = False
 
@@ -34,5 +36,8 @@ class Timer:
         self.is_set = True
 
     def stop(self):
+        """
+        Stops the Timer.
+        """
         self.is_set = False
 

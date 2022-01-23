@@ -12,8 +12,8 @@ class PlayerTests(unittest.TestCase):
 
     def test_player_getters(self):
         """ tests correctness of getter methods """
-        self.assertEqual(self.p.get_x(), self.p.PLAYER_INITIAL_COORDINATES[0])
-        self.assertEqual(self.p.get_y(), self.p.PLAYER_INITIAL_COORDINATES[1])
+        self.assertEqual(self.p.get_x(), Settings.PLAYER_INITIAL_COORDINATES[0])
+        self.assertEqual(self.p.get_y(), Settings.PLAYER_INITIAL_COORDINATES[1])
         self.assertEqual(self.p.get_speed(), Settings.PLAYER_BLOCK_DOWN_SPEED)
 
     def test_move_left(self):

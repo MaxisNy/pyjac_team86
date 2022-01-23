@@ -26,6 +26,7 @@ PLAYER_IMG = "./sprites/player_left.png"
 PLAYER_BLOCK_IMG = "./sprites/player_block.png"
 PLAYER_JUMP_IMG = "./sprites/player_jump.png"
 
+# screen
 intro_text1 = "Yo ho ho! Ahoy heartie! " \
               "The scallywags are trying " \
               "t' scuttle the wit' thar chase guns. " \
@@ -56,6 +57,7 @@ lose_screen_text4 = "Press any other key to restart!"
 lose_texts = [lose_screen_text1, lose_screen_text2, lose_screen_text3,
               lose_screen_text4]
 
+# colours
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARK_GRAY = (40, 40, 40)

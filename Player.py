@@ -10,16 +10,13 @@ class Player(pygame.sprite.Sprite):
     The Player character class.
     """
 
-    # TODO: replace WIDTH and HEIGHT with the Player image
-    WIDTH = 50
-    HEIGHT = 70
-
-    x: int  # Player's x coordinate
-    y: int  # Player's y coordinate
     block: bool  # True if the shield is up, False otherwise
     jumping: bool  # True if the Player is currently in the air, False otherwise
     speed_hor: int  # Player's horizontal movement speed
     speed_ver: int  # Player's vertical movement speed
+    _timer: Timer
+    images: dict
+    direction: str
 
     def __init__(self) -> None:
         """
@@ -30,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.jumping = False
         self.speed_hor = Settings.PLAYER_BLOCK_DOWN_SPEED
         self.speed_ver = Settings.PLAYER_JUMP_SPEED
-        self.timer = Timer()
+        self._timer = Timer()
         self.images = self.generate_player_images()
         self.direction = "LEFT"
         self.rect = self.images["LEFT"].get_rect()
@@ -39,12 +36,36 @@ class Player(pygame.sprite.Sprite):
 
     @staticmethod
     def generate_player_images() -> Dict:
-        return {"LEFT": load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 37, (38 / 24) * Settings.SCREEN_WIDTH // 37),
-                "RIGHT": pygame.transform.flip(load_image(Settings.PLAYER_IMG, Settings.SCREEN_WIDTH // 37, (38 / 24) * Settings.SCREEN_WIDTH // 37), True, False),
-                "LEFT_JUMP": load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 34, (41 / 35) * Settings.SCREEN_WIDTH // 34),
-                "RIGHT_JUMP": pygame.transform.flip(load_image(Settings.PLAYER_JUMP_IMG, Settings.SCREEN_WIDTH // 34, (41 / 35) * Settings.SCREEN_WIDTH // 34), True, False),
-                "LEFT_BLOCK": load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 27, (31 / 24) * Settings.SCREEN_WIDTH // 27),
-                "RIGHT_BLOCK": pygame.transform.flip(load_image(Settings.PLAYER_BLOCK_IMG, Settings.SCREEN_WIDTH // 27, (31 / 24) * Settings.SCREEN_WIDTH // 27), True, False)}
+        """
+        Returns a dictionary of images that relate to
+        possible movement directions.
+        """
+        return {"LEFT": load_image(Settings.PLAYER_IMG,
+                                   Settings.SCREEN_WIDTH // 37,
+                                   (38 / 24) * Settings.SCREEN_WIDTH // 37),
+                "RIGHT": pygame.transform.flip(
+                    load_image(Settings.PLAYER_IMG,
+                               Settings.SCREEN_WIDTH // 37,
+                               (38 / 24) *
+                               Settings.SCREEN_WIDTH // 37), True, False),
+                "LEFT_JUMP": load_image(Settings.PLAYER_JUMP_IMG,
+                                        Settings.SCREEN_WIDTH // 34,
+                                        (41 / 35) *
+                                        Settings.SCREEN_WIDTH // 34),
+                "RIGHT_JUMP": pygame.transform.flip(
+                    load_image(Settings.PLAYER_JUMP_IMG,
+                               Settings.SCREEN_WIDTH // 34,
+                               (41 / 35) *
+                               Settings.SCREEN_WIDTH // 34), True, False),
+                "LEFT_BLOCK": load_image(Settings.PLAYER_BLOCK_IMG,
+                                         Settings.SCREEN_WIDTH // 27,
+                                         (31 / 24) *
+                                         Settings.SCREEN_WIDTH // 27),
+                "RIGHT_BLOCK": pygame.transform.flip(
+                    load_image(Settings.PLAYER_BLOCK_IMG,
+                               Settings.SCREEN_WIDTH // 27,
+                               (31 / 24) *
+                               Settings.SCREEN_WIDTH // 27), True, False)}
 
     def get_x(self):
         """
@@ -58,9 +79,9 @@ class Player(pygame.sprite.Sprite):
         """
         if self.jumping:
             self.rect.y = Settings.PLAYER_INITIAL_COORDINATES[1] - \
-                          (self.speed_ver * self.timer.get_time_elapsed()) + \
+                          (self.speed_ver * self._timer.get_time_elapsed()) + \
                           (Settings.PLAYER_ACCELERATION *
-                          (self.timer.get_time_elapsed()**2) / 2)
+                           (self._timer.get_time_elapsed() ** 2) / 2)
 
             # end the jump
             if self.rect.y > Settings.PLAYER_INITIAL_COORDINATES[1]:
@@ -108,9 +129,12 @@ class Player(pygame.sprite.Sprite):
             self.direction = "LEFT"
 
     def jump(self):
+        """
+        Initializes the jumping movement and changes the Player's direction.
+        """
         if not self.jumping:
             self.jumping = True
-            self.timer.start()
+            self._timer.start()
             if self.direction == "LEFT":
                 self.direction = "LEFT_JUMP"
             else:
@@ -132,45 +156,3 @@ class Player(pygame.sprite.Sprite):
         Disables defense.
         """
         self.block = False
-
-
-if __name__ == '__main__':
-    pygame.init()
-
-    WIDTH = 1600
-    HEIGHT = 900
-
-    surface = pygame.display.set_mode((WIDTH, HEIGHT))
-
-    p = Player()
-
-    game_running = True
-    FPS = 60
-
-    clock = pygame.time.Clock()
-
-    while game_running:
-        clock.tick(FPS)
-        surface.fill((0, 0, 0))
-        p.draw(surface)
-        pygame.display.update()
-
-        print(p.direction)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_running = False
-                # quit()
-
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] and p.get_x() > 0:
-            p.move_left()
-        if keys[pygame.K_d] and p.get_x() + p.WIDTH < WIDTH:
-            p.move_right()
-
-        if keys[pygame.K_LSHIFT]:
-            p.block_up()
-        else:
-            p.block_down()
-            if keys[pygame.K_SPACE]:
-                p.jump()
