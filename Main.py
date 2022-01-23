@@ -232,7 +232,7 @@ class Screen:
                 if pygame.sprite.collide_rect(self.player, projectile) and \
                         self.player.block:
                     self.projectile_container.remove(projectile)
-                if pygame.sprite.collide_rect(self.main_ship, projectile):
+                elif pygame.sprite.collide_rect(self.main_ship, projectile):
                     self.projectile_container.remove(projectile)
                     self.main_ship.damage()
                     if self.main_ship.ship_health <= 0:
